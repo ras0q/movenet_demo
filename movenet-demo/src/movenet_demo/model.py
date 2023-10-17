@@ -15,5 +15,6 @@ class MoveNet:
         model = self.module.signatures["serving_default"]
         input_image = tf.cast(input_image, dtype=tf.int32)
         outputs = model(input_image)
+        # NOTE: keypoints_with_scores consists of [y, x, score] for each keypoint.
         keypoints_with_scores = outputs["output_0"].numpy()
         return keypoints_with_scores

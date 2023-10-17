@@ -46,14 +46,6 @@ if __name__ == "__main__":
         keypoints_with_scores = movenet.predict(input_image)
         keypoints_with_scores = np.squeeze(keypoints_with_scores)
 
-        # keypoints_with_scores: [h, w, score]
-        image_height, image_width, _ = frame.shape
-        keypoints: list[Sequence[int]] = [
-            [int(hw[1] * image_width), int(hw[0] * image_height)]
-            for hw in keypoints_with_scores[:, :2]
-        ]
-        scores = keypoints_with_scores[:, 2]
-
         frame_drawed = draw(frame_copied, keypoints_with_scores, threshold=0.2)
         cv2.imshow("frame", frame_drawed)
 
