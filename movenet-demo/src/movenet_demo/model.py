@@ -1,6 +1,6 @@
 import tensorflow as tf
 import tensorflow.python.trackable.autotrackable as autotrackable
-import tensorflow.security.fuzzing.py.annotation_types as atypes
+from cv2.typing import MatLike
 
 
 class MoveNet:
@@ -11,7 +11,7 @@ class MoveNet:
         self.module = module
         self.input_size = input_size
 
-    def predict(self, input_image: atypes.TensorFuzzingAnnotation) -> tf.Tensor:
+    def predict(self, input_image: MatLike) -> tf.Tensor:
         model = self.module.signatures["serving_default"]
         input_image = tf.cast(input_image, dtype=tf.int32)
         outputs = model(input_image)
