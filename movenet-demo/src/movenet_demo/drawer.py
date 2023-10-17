@@ -1,5 +1,5 @@
 import cv2
-from cv2.typing import MatLike, Point
+from cv2.typing import MatLike
 
 
 # 0: nose
@@ -13,7 +13,8 @@ from cv2.typing import MatLike, Point
 # 15: left_ankle # 16: right_ankle
 def draw(
     frame: MatLike,
-    keypoints: list[Point],
+    keypoints_with_scores: list[list[float]],
+    threshold: float = 0.2,
 ) -> MatLike:
     keypoint_edges = [
         (0, 1),  # nose - left_eye
@@ -34,15 +35,20 @@ def draw(
         (14, 16),  # right_knee - right_ankle
     ]
 
-    for i in range(0, 17):
-        for j in range(i, 17):
-            if (i, j) in keypoint_edges:
-                cv2.line(
-                    frame,
-                    keypoints[i],
-                    keypoints[j],
-                    [0, 255, 0],
-                    2,
-                )
+    image_height, image_width, _ = frame.shape
+    for i, j in keypoint_edges:
+        y_i, x_i, score_i = keypoints_with_scores[i]
+        y_j, x_j, score_j = keypoints_with_scores[j]
+
+        if score_i < threshold or score_j < threshold:
+            continue
+
+        cv2.line(
+            frame,
+            (int(x_i * image_width), int(y_i * image_height)),
+            (int(x_j * image_width), int(y_j * image_height)),
+            [0, 255, 0],
+            2,
+        )
 
     return frame

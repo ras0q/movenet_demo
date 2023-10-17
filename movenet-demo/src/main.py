@@ -54,7 +54,7 @@ if __name__ == "__main__":
         ]
         scores = keypoints_with_scores[:, 2]
 
-        frame_drawed = draw(frame_copied, keypoints)
+        frame_drawed = draw(frame_copied, keypoints_with_scores, threshold=0.2)
         cv2.imshow("frame", frame_drawed)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
