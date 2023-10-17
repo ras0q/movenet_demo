@@ -14,6 +14,7 @@ cachetools==5.3.1
 certifi==2023.7.22
 charset-normalizer==3.3.0
 click==8.1.7
+colorama==0.4.6
 flatbuffers==23.5.26
 gast==0.5.4
 google-auth==2.23.3
@@ -49,7 +50,8 @@ tensorboard-data-server==0.7.1
 tensorflow==2.14.0
 tensorflow-estimator==2.14.0
 tensorflow-hub==0.15.0
-tensorflow-io-gcs-filesystem==0.34.0
+tensorflow-intel==2.14.0
+tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.3.0
 typing-extensions==4.8.0
 urllib3==2.0.6
