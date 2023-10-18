@@ -1,6 +1,5 @@
 import argparse
 import copy
-from typing import Sequence
 
 import cv2
 import numpy as np
