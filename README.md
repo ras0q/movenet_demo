@@ -1,4 +1,4 @@
-# movenet-demo
+# movenet_demo
 
 ## Requirement
 

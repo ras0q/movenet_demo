@@ -1,5 +1,5 @@
 [project]
-name = "movenet-demo"
+name = "movenet_demo"
 version = "0.1.0"
 description = "Add your description here"
 authors = [{ name = "ras0q", email = "ras0q@users.noreply.github.com" }]
