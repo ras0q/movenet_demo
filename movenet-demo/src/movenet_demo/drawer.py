@@ -15,6 +15,7 @@ def draw(
     frame: MatLike,
     keypoints_with_scores: list[list[float]],
     threshold: float = 0.2,
+    elapsed_sec: float = 0,
 ) -> MatLike:
     keypoint_edges = [
         (0, 1),  # nose - left_eye
@@ -50,5 +51,19 @@ def draw(
             [0, 255, 0],
             2,
         )
+
+    def put_text(line: int, text: str) -> None:
+        cv2.putText(
+            frame,
+            text,
+            (10, 30 * line),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (0, 0, 0),
+            1,
+        )
+
+    put_text(1, f"elapsed: {elapsed_sec:.3f} sec")
+    put_text(2, "exit: q")
 
     return frame
