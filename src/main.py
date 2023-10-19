@@ -5,7 +5,7 @@ import time
 import cv2
 import numpy as np
 import tensorflow_hub as hub
-from movenet_demo.drawer import draw
+from movenet_demo.drawer import draw_joint_edges, draw_text
 from movenet_demo.model import MoveNet
 
 
@@ -41,6 +41,7 @@ if __name__ == "__main__":
 
     threshold = 0.2
     last_scored_sec = 0.0  # record results every second to csv
+    is_record_step = False
     start_tick_count = cv2.getTickCount()
     while True:
         ret, frame = cap.read()
@@ -69,16 +70,27 @@ if __name__ == "__main__":
             )
             last_scored_sec = elapsed_sec
 
-        frame_drawed = draw(
+        frame_drawed = draw_joint_edges(
             frame_copied,
             keypoints_with_scores,
             threshold,
-            elapsed_sec,
         )
+
+        if is_record_step:
+            draw_text(frame_drawed, 1, "recording...")
+            draw_text(frame_drawed, 2, f"elapsed: {elapsed_sec:.3f} sec")
+            draw_text(frame_drawed, 3, "exit: q")
+        else:
+            draw_text(frame_drawed, 1, "press r to start recording")
+
         cv2.imshow("frame", frame_drawed)
 
-        if cv2.waitKey(1) & 0xFF == ord("q"):
+        key = cv2.waitKey(1)
+        if key == ord("q"):
             break
+        elif key == ord("r") and not is_record_step:
+            is_record_step = True
+            start_tick_count = cv2.getTickCount()
 
     cap.release()
     cv2.destroyAllWindows()
