@@ -22,6 +22,7 @@ options:
 ### With rye
 
 1. Install rye referring to <https://rye-up.com/guide/installation>
+   or execute `winget install Rye.Rye`
 
 2. Install Python with rye
 
