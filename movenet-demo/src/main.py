@@ -28,9 +28,9 @@ if __name__ == "__main__":
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)
 
-    module = hub.load("https://tfhub.dev/google/movenet/singlepose/lightning/4")
+    module = hub.load("https://tfhub.dev/google/movenet/singlepose/thunder/4")
     assert module is not None
-    input_size = 192
+    input_size = 256
     movenet = MoveNet(module, input_size)
 
     threshold = 0.2
