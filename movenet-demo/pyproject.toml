@@ -22,7 +22,6 @@ dev-dependencies = ["black>=23.9.1", "mypy>=1.6.0", "ruff>=0.1.0"]
 [tool.hatch.metadata]
 allow-direct-references = true
 
-
 [tool.black]
 line_length = 88
 
