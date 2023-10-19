@@ -6,17 +6,12 @@
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true
   },
-  "black-formatter.path": [
-    // "${workspaceFolder}/.venv/bin/black",
-    "${workspaceFolder}\\.venv\\Scripts\\black.exe"
-  ],
-  "mypy-type-checker.path": [
-    // "${workspaceFolder}/.venv/bin/mypy",
-    "${workspaceFolder}\\.venv\\Scripts\\mypy.exe"
-  ],
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-  "ruff.path": [
-    // "${workspaceFolder}/.venv/bin/ruff",
-    "${workspaceFolder}\\.venv\\Scripts\\ruff.exe"
-  ]
+  "black-formatter.path": ["${workspaceFolder}\\.venv\\Scripts\\black.exe"],
+  "mypy-type-checker.path": ["${workspaceFolder}\\.venv\\Scripts\\mypy.exe"],
+  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+  "ruff.path": ["${workspaceFolder}\\.venv\\Scripts\\ruff.exe"]
+  // "black-formatter.path": ["${workspaceFolder}/.venv/bin/black"],
+  // "mypy-type-checker.path": ["${workspaceFolder}/.venv/bin/mypy"],
+  // "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  // "ruff.path": ["${workspaceFolder}/.venv/bin/ruff"]
 }
