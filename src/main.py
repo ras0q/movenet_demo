@@ -1,5 +1,6 @@
 import argparse
 import copy
+import time
 
 import cv2
 import numpy as np
@@ -28,18 +29,19 @@ if __name__ == "__main__":
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)
 
-    module = hub.load("https://www.kaggle.com/models/google/movenet/frameworks/TensorFlow2/variations/singlepose-thunder/versions/4")
+    module = hub.load(
+        "https://www.kaggle.com/models/google/movenet/frameworks/TensorFlow2/variations/singlepose-thunder/versions/4"
+    )
     assert module is not None
     input_size = 256
     movenet = MoveNet(module, input_size)
 
-    threshold = 0.2
-    start_tick_count = cv2.getTickCount()
-    last_scored_sec = 0.0  # record results every second to csv
-
-    csv_file = open(f"{__file__}/../data/results_{start_tick_count}.csv", "w")
+    csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
     csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
 
+    threshold = 0.2
+    last_scored_sec = 0.0  # record results every second to csv
+    start_tick_count = cv2.getTickCount()
     while True:
         ret, frame = cap.read()
         assert ret
