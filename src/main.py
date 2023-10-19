@@ -1,10 +1,11 @@
 import argparse
 import copy
+import time
 
 import cv2
 import numpy as np
 import tensorflow_hub as hub
-from movenet_demo.drawer import draw
+from movenet_demo.drawer import draw_joint_edges, draw_text
 from movenet_demo.model import MoveNet
 
 
@@ -28,18 +29,20 @@ if __name__ == "__main__":
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)
 
-    module = hub.load("https://tfhub.dev/google/movenet/singlepose/thunder/4")
+    module = hub.load(
+        "https://www.kaggle.com/models/google/movenet/frameworks/TensorFlow2/variations/singlepose-thunder/versions/4"
+    )
     assert module is not None
     input_size = 256
     movenet = MoveNet(module, input_size)
 
-    threshold = 0.2
-    start_tick_count = cv2.getTickCount()
-    last_scored_sec = 0.0  # record results every second to csv
-
-    csv_file = open(f"{__file__}/../data/results_{start_tick_count}.csv", "w")
+    csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
     csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
 
+    threshold = 0.2
+    last_scored_sec = 0.0  # record results every second to csv
+    is_record_step = False
+    start_tick_count = cv2.getTickCount()
     while True:
         ret, frame = cap.read()
         assert ret
@@ -67,16 +70,27 @@ if __name__ == "__main__":
             )
             last_scored_sec = elapsed_sec
 
-        frame_drawed = draw(
+        frame_drawed = draw_joint_edges(
             frame_copied,
             keypoints_with_scores,
             threshold,
-            elapsed_sec,
         )
+
+        if is_record_step:
+            draw_text(frame_drawed, 1, "recording...")
+            draw_text(frame_drawed, 2, f"elapsed: {elapsed_sec:.3f} sec")
+            draw_text(frame_drawed, 3, "exit: q")
+        else:
+            draw_text(frame_drawed, 1, "press r to start recording")
+
         cv2.imshow("frame", frame_drawed)
 
-        if cv2.waitKey(1) & 0xFF == ord("q"):
+        key = cv2.waitKey(1)
+        if key == ord("q"):
             break
+        elif key == ord("r") and not is_record_step:
+            is_record_step = True
+            start_tick_count = cv2.getTickCount()
 
     cap.release()
     cv2.destroyAllWindows()
