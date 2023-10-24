@@ -5,8 +5,7 @@ import time
 import cv2
 import numpy as np
 import tensorflow_hub as hub
-from movenet_demo.drawer import draw_joint_edges, draw_text
-from movenet_demo.model import MoveNet
+from movenet_demo import drawer, model
 
 
 def get_args() -> argparse.Namespace:
@@ -34,7 +33,7 @@ if __name__ == "__main__":
     )
     assert module is not None
     input_size = 256
-    movenet = MoveNet(module, input_size)
+    movenet = model.MoveNet(module, input_size)
 
     csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
     csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
@@ -70,18 +69,18 @@ if __name__ == "__main__":
             )
             last_scored_sec = elapsed_sec
 
-        frame_drawed = draw_joint_edges(
+        frame_drawed = drawer.draw_joint_edges(
             frame_copied,
             keypoints_with_scores,
             threshold,
         )
 
         if is_record_step:
-            draw_text(frame_drawed, 1, "recording...")
-            draw_text(frame_drawed, 2, f"elapsed: {elapsed_sec:.3f} sec")
-            draw_text(frame_drawed, 3, "exit: q")
+            drawer.draw_text(frame_drawed, 1, "recording...")
+            drawer.draw_text(frame_drawed, 2, f"elapsed: {elapsed_sec:.3f} sec")
+            drawer.draw_text(frame_drawed, 3, "exit: q")
         else:
-            draw_text(frame_drawed, 1, "press r to start recording")
+            drawer.draw_text(frame_drawed, 1, "press r to start recording")
 
         cv2.imshow("frame", frame_drawed)
 
