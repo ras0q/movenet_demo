@@ -39,7 +39,7 @@ rye sync
 4. Run demo
 
 ```sh
-rye run python src/main.py
+rye run app
 ```
 
 ### Without rye
