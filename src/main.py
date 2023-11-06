@@ -4,7 +4,6 @@ import time
 
 import cv2
 import numpy as np
-import tensorflow_hub as hub
 from movenet_demo import drawer, model
 
 
@@ -28,12 +27,9 @@ if __name__ == "__main__":
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)
 
-    module = hub.load(
-        "https://www.kaggle.com/models/google/movenet/frameworks/TensorFlow2/variations/singlepose-thunder/versions/4"
-    )
-    assert module is not None
+    moduleURL = "https://www.kaggle.com/models/google/movenet/frameworks/TensorFlow2/variations/singlepose-thunder/versions/4"
     input_size = 256
-    movenet = model.MoveNet(module, input_size)
+    movenet = model.MoveNet(moduleURL, input_size)
 
     csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
     csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
