@@ -48,6 +48,9 @@ if __name__ == "__main__":
         ret, frame = cap.read()
         assert ret
 
+        # mirror frame
+        frame = cv2.flip(frame, 1)
+
         frame_copied = copy.deepcopy(frame)
 
         input_image = cv2.resize(frame, dsize=(input_size, input_size))
