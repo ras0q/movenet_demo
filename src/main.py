@@ -23,17 +23,23 @@ if __name__ == "__main__":
     cap_width: int = args.width
     cap_height: int = args.height
 
+    print(
+        f"INFO: starting camera... (d: {cap_device}, w: {cap_width}, h: {cap_height})"
+    )
     cap = cv2.VideoCapture(cap_device)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)
 
+    print("INFO: loading model...")
     moduleURL = "https://www.kaggle.com/models/google/movenet/frameworks/TensorFlow2/variations/singlepose-thunder/versions/4"
     input_size = 256
     movenet = model.MoveNet(moduleURL, input_size)
 
+    print("INFO: creating output csv file...")
     csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
     csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
 
+    print("INFO: starting capture loop...")
     threshold = 0.2
     last_scored_sec = 0.0  # record results every second to csv
     is_record_step = False
