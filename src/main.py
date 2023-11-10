@@ -4,7 +4,8 @@ import time
 
 import cv2
 import numpy as np
-from movenet_demo import drawer, model
+from movenet_demo import drawer
+from movenet_demo.movenet import MoveNet
 
 
 def get_args() -> argparse.Namespace:
@@ -31,8 +32,8 @@ if __name__ == "__main__":
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)
 
     print("INFO: loading model...")
-    model_type = model.MoveNet.ModelType.SINGLEPOSE_THUNDER
-    movenet = model.MoveNet(model_type)
+    model_type = MoveNet.ModelType.SINGLEPOSE_THUNDER
+    movenet = MoveNet(model_type)
 
     print("INFO: creating output csv file...")
     csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
