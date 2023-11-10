@@ -4,6 +4,7 @@ import time
 
 import cv2
 import numpy as np
+import tensorflow as tf
 from movenet_demo import drawer
 from movenet_demo.movenet import MoveNet
 
@@ -45,16 +46,13 @@ if __name__ == "__main__":
     print("INFO: loading model...")
     movenet = MoveNet(model_type)
 
-    print("INFO: creating output csv file...")
-    csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
-    csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
-
     print("INFO: starting capture loop...")
     input_size = model_type.input_size()
     threshold = 0.2
     last_scored_sec = 0.0  # record results every second to csv
     is_record_step = False
-    start_tick_count = cv2.getTickCount()
+    start_tick_count = 0
+    results: list[tf.Tensor] = []
     while True:
         ret, frame = cap.read()
         assert ret
@@ -72,17 +70,8 @@ if __name__ == "__main__":
 
         # record results every second to csv
         elapsed_sec = (cv2.getTickCount() - start_tick_count) / cv2.getTickFrequency()
-        if elapsed_sec - last_scored_sec > 1.0:
-            csv_file.write(
-                f"{elapsed_sec:.3f},"
-                + ",".join(
-                    [
-                        f"{yxs[0]:.3f},{yxs[1]:.3f},{yxs[2]:.3f}"
-                        for yxs in keypoints_with_scores
-                    ]
-                )
-                + "\n"
-            )
+        if is_record_step and elapsed_sec - last_scored_sec > 1.0:
+            results.append(keypoints_with_scores)
             last_scored_sec = elapsed_sec
 
         frame_drawed = drawer.draw_joint_edges(
@@ -106,6 +95,16 @@ if __name__ == "__main__":
         elif key == ord("r") and not is_record_step:
             is_record_step = True
             start_tick_count = cv2.getTickCount()
+
+    print("INFO: outputting results to csv...")
+    csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
+    csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
+    for i, result in enumerate(results):
+        csv_file.write(
+            f"{i},"
+            + ",".join([f"{yxs[0]:.3f},{yxs[1]:.3f},{yxs[2]:.3f}" for yxs in result])
+            + "\n"
+        )
 
     print("INFO: quitting...")
     cap.release()
