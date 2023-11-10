@@ -97,5 +97,6 @@ if __name__ == "__main__":
             is_record_step = True
             start_tick_count = cv2.getTickCount()
 
+    print("INFO: quitting...")
     cap.release()
     cv2.destroyAllWindows()
