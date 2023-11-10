@@ -62,12 +62,6 @@ if __name__ == "__main__":
         keypoints_with_scores = movenet.predict(input_image)
         keypoints_with_scores = np.squeeze(keypoints_with_scores)
 
-        # record results every second to csv
-        elapsed_sec = (cv2.getTickCount() - start_tick_count) / cv2.getTickFrequency()
-        if is_record_step and elapsed_sec - last_scored_sec > 1.0:
-            results.append(keypoints_with_scores)
-            last_scored_sec = elapsed_sec
-
         frame_drawed = drawer.draw_joint_edges(
             frame,
             keypoints_with_scores,
@@ -75,9 +69,14 @@ if __name__ == "__main__":
         )
 
         if is_record_step:
+            elapsed = (cv2.getTickCount() - start_tick_count) / cv2.getTickFrequency()
             drawer.draw_text(frame_drawed, 1, "recording...")
-            drawer.draw_text(frame_drawed, 2, f"elapsed: {elapsed_sec:.3f} sec")
+            drawer.draw_text(frame_drawed, 2, f"elapsed: {elapsed:.3f} sec")
             drawer.draw_text(frame_drawed, 3, "exit: q")
+            # record results every second to csv
+            if elapsed - last_scored_sec > 1.0:
+                results.append(keypoints_with_scores)
+                last_scored_sec = elapsed
         else:
             drawer.draw_text(frame_drawed, 1, "press r to start recording")
 
