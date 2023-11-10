@@ -14,6 +14,12 @@ def get_args() -> argparse.Namespace:
     parser.add_argument("--device", help="camera device index", type=int, default=0)
     parser.add_argument("--width", help="camera width", type=int, default=640)
     parser.add_argument("--height", help="camera height", type=int, default=480)
+    parser.add_argument(
+        "--model",
+        help=f"model type ({', '.join([t.value for t in MoveNet.ModelType])})",
+        type=MoveNet.ModelType,
+        default=MoveNet.ModelType.SINGLEPOSE_THUNDER,
+    )
 
     return parser.parse_args()
 
@@ -23,16 +29,20 @@ if __name__ == "__main__":
     cap_device: int = args.device
     cap_width: int = args.width
     cap_height: int = args.height
+    model_type: MoveNet.ModelType = args.model
 
     print(
-        f"INFO: starting camera... (dev: {cap_device}, w: {cap_width}, h: {cap_height})"
+        "INFO: starting camera..."
+        + f"\n\tdevice: {cap_device}"
+        + f"\n\twidth: {cap_width}"
+        + f"\n\theight: {cap_height}"
+        + f"\n\tmodel: {model_type.name}"
     )
     cap = cv2.VideoCapture(cap_device)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)
 
     print("INFO: loading model...")
-    model_type = MoveNet.ModelType.SINGLEPOSE_THUNDER
     movenet = MoveNet(model_type)
 
     print("INFO: creating output csv file...")
