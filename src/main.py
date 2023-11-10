@@ -50,7 +50,7 @@ if __name__ == "__main__":
     last_scored_sec = 0.0  # record results every second to csv
     is_record_step = False
     start_tick_count = 0
-    results: list[tf.Tensor] = []
+    results: dict[float, tf.Tensor] = {}
 
     print("INFO: starting capture loop...")
     while True:
@@ -78,7 +78,7 @@ if __name__ == "__main__":
             drawer.draw_text(frame_drawed, 4, "exit: q")
             # record results every second to csv
             if elapsed - last_scored_sec > 1.0:
-                results.append(keypoints_with_scores)
+                results[elapsed] = keypoints_with_scores
                 last_scored_sec = elapsed
         else:
             drawer.draw_text(frame_drawed, 1, "press r to start recording")
@@ -102,10 +102,10 @@ if __name__ == "__main__":
     print("INFO: outputting results to csv...")
     csv_file = open(f"{__file__}/../data/results_{username}_{time.time()}.csv", "w")
     csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
-    for i, result in enumerate(results):
+    for i, result in results.items():
         csv_file.write(
             f"{i},"
-            + ",".join([f"{yxs[0]:.3f},{yxs[1]:.3f},{yxs[2]:.3f}" for yxs in result])
+            + ",".join([f"{y:.3f},{x:.3f},{s:.3f}" for (y, x, s) in result])
             + "\n"
         )
 
