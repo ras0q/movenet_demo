@@ -44,6 +44,8 @@ if __name__ == "__main__":
     print("INFO: loading model..." + f"\n\tmodel: {model_type.name}")
     movenet = MoveNet(model_type)
 
+    qrcode_detector = cv2.QRCodeDetector()
+    username = ""
     input_size = model_type.input_size()
     last_scored_sec = 0.0  # record results every second to csv
     is_record_step = False
@@ -71,14 +73,22 @@ if __name__ == "__main__":
         if is_record_step:
             elapsed = (cv2.getTickCount() - start_tick_count) / cv2.getTickFrequency()
             drawer.draw_text(frame_drawed, 1, "recording...")
-            drawer.draw_text(frame_drawed, 2, f"elapsed: {elapsed:.3f} sec")
-            drawer.draw_text(frame_drawed, 3, "exit: q")
+            drawer.draw_text(frame_drawed, 2, f"username: {username}")
+            drawer.draw_text(frame_drawed, 3, f"elapsed: {elapsed:.3f} sec")
+            drawer.draw_text(frame_drawed, 4, "exit: q")
             # record results every second to csv
             if elapsed - last_scored_sec > 1.0:
                 results.append(keypoints_with_scores)
                 last_scored_sec = elapsed
         else:
             drawer.draw_text(frame_drawed, 1, "press r to start recording")
+            drawer.draw_text(frame_drawed, 2, f"username: {username}")
+            if not username:
+                drawer.draw_text(frame_drawed, 3, "set username from QR code")
+                decoded, _, _ = qrcode_detector.detectAndDecode(frame_drawed)
+                if decoded:
+                    print(f"INFO: detected username from QR code: {decoded}")
+                    username = decoded
 
         cv2.imshow("frame", frame_drawed)
 
@@ -90,7 +100,7 @@ if __name__ == "__main__":
             start_tick_count = cv2.getTickCount()
 
     print("INFO: outputting results to csv...")
-    csv_file = open(f"{__file__}/../data/results_{time.time()}.csv", "w")
+    csv_file = open(f"{__file__}/../data/results_{username}_{time.time()}.csv", "w")
     csv_file.write("sec," + ",".join([f"y_{i},x_{i},s_{i}" for i in range(17)]) + "\n")
     for i, result in enumerate(results):
         csv_file.write(
