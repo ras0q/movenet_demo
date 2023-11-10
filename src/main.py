@@ -25,7 +25,7 @@ if __name__ == "__main__":
     cap_height: int = args.height
 
     print(
-        f"INFO: starting camera... (d: {cap_device}, w: {cap_width}, h: {cap_height})"
+        f"INFO: starting camera... (dev: {cap_device}, w: {cap_width}, h: {cap_height})"
     )
     cap = cv2.VideoCapture(cap_device)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)
