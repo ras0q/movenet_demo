@@ -57,11 +57,7 @@ if __name__ == "__main__":
         ret, frame = cap.read()
         assert ret
 
-        # mirror frame
-        frame = cv2.flip(frame, 1)
-
-        frame_copied = copy.deepcopy(frame)
-
+        frame = cv2.flip(frame, 1)  # mirror frame
         input_image = cv2.resize(frame, dsize=(input_size, input_size))
         input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
         input_image = input_image.reshape(-1, input_size, input_size, 3)
@@ -75,7 +71,7 @@ if __name__ == "__main__":
             last_scored_sec = elapsed_sec
 
         frame_drawed = drawer.draw_joint_edges(
-            frame_copied,
+            frame,
             keypoints_with_scores,
             threshold,
         )
