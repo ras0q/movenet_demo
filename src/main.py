@@ -44,13 +44,13 @@ if __name__ == "__main__":
     print("INFO: loading model..." + f"\n\tmodel: {model_type.name}")
     movenet = MoveNet(model_type)
 
-    print("INFO: starting capture loop...")
     input_size = model_type.input_size()
-    threshold = 0.2
     last_scored_sec = 0.0  # record results every second to csv
     is_record_step = False
     start_tick_count = 0
     results: list[tf.Tensor] = []
+
+    print("INFO: starting capture loop...")
     while True:
         ret, frame = cap.read()
         assert ret
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         frame_drawed = drawer.draw_joint_edges(
             frame,
             keypoints_with_scores,
-            threshold,
+            threshold=0.2,
         )
 
         if is_record_step:
