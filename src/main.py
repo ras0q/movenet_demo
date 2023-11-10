@@ -36,13 +36,12 @@ if __name__ == "__main__":
         + f"\n\tdevice: {cap_device}"
         + f"\n\twidth: {cap_width}"
         + f"\n\theight: {cap_height}"
-        + f"\n\tmodel: {model_type.name}"
     )
     cap = cv2.VideoCapture(cap_device)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap_height)
 
-    print("INFO: loading model...")
+    print("INFO: loading model..." + f"\n\tmodel: {model_type.name}")
     movenet = MoveNet(model_type)
 
     print("INFO: starting capture loop...")
