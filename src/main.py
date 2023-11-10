@@ -47,7 +47,7 @@ if __name__ == "__main__":
     qrcode_detector = cv2.QRCodeDetector()
     username = ""
     input_size = model_type.input_size()
-    last_scored_sec = 0.0  # record results every second to csv
+    last_scored_sec = 0.0  # record results every 100ms to csv
     is_record_step = False
     start_tick_count = 0
     results: dict[float, tf.Tensor] = {}
@@ -76,8 +76,8 @@ if __name__ == "__main__":
             drawer.draw_text(frame_drawed, 2, f"username: {username}")
             drawer.draw_text(frame_drawed, 3, f"elapsed: {elapsed:.3f} sec")
             drawer.draw_text(frame_drawed, 4, "exit: q")
-            # record results every second to csv
-            if elapsed - last_scored_sec > 1.0:
+            # record results every 100ms to csv
+            if elapsed - last_scored_sec > 0.1:
                 results[elapsed] = keypoints_with_scores
                 last_scored_sec = elapsed
         else:
