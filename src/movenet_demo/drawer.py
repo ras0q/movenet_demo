@@ -54,6 +54,27 @@ def draw_joint_edges(
     return frame
 
 
+def draw_nose_keypoints(
+    frame: MatLike,
+    nose_keypoints_with_scores: list[list[float]],
+    threshold: float = 0.2,
+) -> MatLike:
+    image_height, image_width, _ = frame.shape
+    for y, x, score in nose_keypoints_with_scores:
+        if score < threshold:
+            continue
+
+        cv2.circle(
+            frame,
+            (int(x * image_width), int(y * image_height)),
+            5,
+            [0, 0, 255],
+            -1,
+        )
+
+    return frame
+
+
 def draw_text(frame: MatLike, line: int, text: str) -> None:
     cv2.putText(
         frame,

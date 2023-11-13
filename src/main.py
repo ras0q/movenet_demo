@@ -70,6 +70,16 @@ if __name__ == "__main__":
             threshold=0.2,
         )
 
+        nose_keypoints_with_scores: list[list[float]] = []
+        for v in results.values():
+            nose_keypoints_with_scores.append(v[0])
+
+        frame_drawed = drawer.draw_nose_keypoints(
+            frame_drawed,
+            nose_keypoints_with_scores,
+            threshold=0.2,
+        )
+
         if is_record_step:
             elapsed = (cv2.getTickCount() - start_tick_count) / cv2.getTickFrequency()
             drawer.draw_text(frame_drawed, 1, "recording...")
