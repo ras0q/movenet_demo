@@ -22,6 +22,9 @@ dev-dependencies = ["black>=23.9.1", "mypy>=1.6.0", "ruff>=0.1.0"]
 [tool.rye.scripts]
 app = "python ./src/main.py"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/movenet_demo"]
+
 [tool.hatch.metadata]
 allow-direct-references = true
 
